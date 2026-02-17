@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,85 +9,38 @@ import {
   SafeAreaView,
   StatusBar,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Colors } from '../../constants/constants';
 import { IconSymbol } from '../../components/ui/icon-symbol';
-
-interface Recipe {
-  id: string;
-  title: string;
-  description: string;
-  image: string;
-  totalTime: number;
-  portions: number;
-  style: string;
-  tags: { id: string; label: string }[];
-}
+import { getListRecipes } from '../../lib/api-client';
+import { Recipe } from '../../lib/api-client.interface';
 
 export default function RecipesScreen() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Mock data - in real app this would come from API
-  const recipes: Recipe[] = [
-    {
-      id: '1',
-      title: 'Bowls de vegetales con pollo estilo diosa',
-      description:
-        'Esta receta presenta una ensalada estilo diosa verde que combina kale lacinato, pimientos y tomates, acompañada de pollo marinado.',
-      image: 'https://via.placeholder.com/500x500?text=Bowls+de+vegetales+con+pollo',
-      totalTime: 288,
-      portions: 4,
-      style: 'Mediterránea',
-      tags: [
-        { id: '1', label: 'Con carne' },
-        { id: '2', label: 'Plato principal' },
-      ],
-    },
-    {
-      id: '2',
-      title: 'Pechugas de Pollo Asadas al Horno',
-      description:
-        'Una receta infalible para pechugas de pollo jugosas y llenas de sabor. Requiere solo 5 ingredientes.',
-      image: 'https://via.placeholder.com/500x500?text=Pechugas+de+Pollo',
-      totalTime: 35,
-      portions: 4,
-      style: 'Mediterránea',
-      tags: [
-        { id: '1', label: 'Con carne' },
-        { id: '2', label: 'Sin gluten' },
-      ],
-    },
-    {
-      id: '3',
-      title: 'Ensalada César de coles de Bruselas',
-      description:
-        'La ensalada César de coles de Bruselas combina el sabor asado de las coles con el toque característico de salsa Worcestershire.',
-      image: 'https://via.placeholder.com/500x500?text=Ensalada+César',
-      totalTime: 25,
-      portions: 4,
-      style: 'Mediterránea',
-      tags: [
-        { id: '1', label: 'Alta en fibra' },
-        { id: '2', label: 'Alta en proteínas' },
-      ],
-    },
-    {
-      id: '4',
-      title: 'Helado de banana y arándanos',
-      description:
-        'Un helado refrescante y saludable hecho con ingredientes naturales y sin procesar.',
-      image: 'https://via.placeholder.com/500x500?text=Helado+de+banana',
-      totalTime: 10,
-      portions: 4,
-      style: 'Mediterránea',
-      tags: [
-        { id: '1', label: 'Sin gluten' },
-        { id: '2', label: 'Postre' },
-      ],
-    },
-  ];
+  useEffect(() => {
+    const loadRecipes = async () => {
+      try {
+        setLoading(true);
+        const data = await getListRecipes();
+        setRecipes(data);
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to load recipes';
+        setError(errorMessage);
+        console.error('Error loading recipes:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadRecipes();
+  }, []);
 
   const filteredRecipes = recipes.filter((recipe) =>
     recipe.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -99,11 +52,11 @@ export default function RecipesScreen() {
       onPress={() =>
         router.push({
           pathname: '/recipe-detail',
-          params: { recipeId: item.id },
+          params: { recipeId: item.id.toString() },
         })
       }
     >
-      <Image source={{ uri: item.image }} style={styles.cardImage} />
+      <Image source={{ uri: item.imageUrl }} style={styles.cardImage} />
       <View style={styles.cardContent}>
         <Text style={styles.cardTitle}>{item.title}</Text>
         <Text style={styles.cardDescription} numberOfLines={2}>
@@ -112,7 +65,7 @@ export default function RecipesScreen() {
         <View style={styles.cardFooter}>
           <View style={styles.timeContainer}>
             <IconSymbol name="clock" size={14} color={Colors.primary} />
-            <Text style={styles.timeText}>{item.totalTime} min</Text>
+            <Text style={styles.timeText}>{item.preparationTimeMinutes} min</Text>
           </View>
           <View style={styles.portionsContainer}>
             <IconSymbol name="fork.knife" size={14} color={Colors.primary} />
@@ -122,6 +75,27 @@ export default function RecipesScreen() {
       </View>
     </Pressable>
   );
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.centerContainer}>
+          <ActivityIndicator size="large" color={Colors.primary} />
+          <Text style={styles.loadingText}>Cargando recetas...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (error) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.centerContainer}>
+          <Text style={styles.errorText}>Error: {error}</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -145,13 +119,19 @@ export default function RecipesScreen() {
       </View>
 
       {/* Recipes List */}
-      <FlatList
-        data={filteredRecipes}
-        renderItem={({ item }) => <RecipeCard item={item} />}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.listContent}
-        showsVerticalScrollIndicator={false}
-      />
+      {filteredRecipes.length === 0 ? (
+        <View style={styles.centerContainer}>
+          <Text style={styles.noResultsText}>No se encontraron recetas</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={filteredRecipes}
+          renderItem={({ item }) => <RecipeCard item={item} />}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </SafeAreaView>
   );
 }
@@ -160,6 +140,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  centerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 16,
+    color: Colors.primary,
+    fontWeight: '500',
+  },
+  errorText: {
+    fontSize: 16,
+    color: '#FF6B6B',
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  noResultsText: {
+    fontSize: 16,
+    color: '#64748B',
+    fontWeight: '500',
   },
   header: {
     paddingHorizontal: 16,

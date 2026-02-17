@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet, FlatList } from "react-native";
-import { Tag } from "../../lib/api-client";
-
+import { Tag } from "../../lib/api-client.interface";
 const TagElement = ({ tag }: { tag: Tag }) => (
     <View style={styles.tagBadge}>
       <Text style={styles.tagText}>{tag.description}</Text>
@@ -8,6 +7,8 @@ const TagElement = ({ tag }: { tag: Tag }) => (
   );
 
 export function Tags({tags}: {tags: Tag[]}) {
+    
+    console.log(tags)
     return (
         <View style={styles.tagsContainer}> 
             {

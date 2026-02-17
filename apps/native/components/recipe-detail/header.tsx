@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
-import { Recipe } from "../../lib/api-client";
+import { Recipe } from "../../lib/api-client.interface";
 import { IconSymbol } from "../ui/icon-symbol";
 import { Colors } from "../../constants/constants";
 

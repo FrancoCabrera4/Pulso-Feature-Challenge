@@ -84,7 +84,7 @@ async function seedDev(dataSource: DataSource) {
         description: 'Esta receta presenta una ensalada estilo diosa verde que combina kale lacinato, pimientos y tomates, acompañada de pollo marinado en una cremosa mezcla de suero de leche y yogur griego.',
         portions: 4,
         preparationTimeMinutes: 288, // 4.8 hours = 288 minutes
-        imageUrl: 'https://via.placeholder.com/500x500?text=Bowls+de+vegetales+con+pollo',
+        imageUrl: 'https://pulso-feature-bucket.s3.sa-east-1.amazonaws.com/bowls_vegetales_pollo_diosa.png',
         tags: [tagConCarne, tagPlatoPrincipal, tagBajaEnSodio]
     }));
 
@@ -189,7 +189,7 @@ async function seedDev(dataSource: DataSource) {
         description: 'Una receta infalible para pechugas de pollo jugosas y llenas de sabor. Requiere solo 5 ingredientes que probablemente ya tengas en la despensa.',
         portions: 4,
         preparationTimeMinutes: 35,
-        imageUrl: 'https://via.placeholder.com/500x500?text=Pechugas+de+Pollo+Asadas',
+        imageUrl: 'https://pulso-feature-bucket.s3.sa-east-1.amazonaws.com/pechugas_pollo_asadas_horno.png',
         tags: [tagConCarne, tagSinGluten, tagSinLactosa, tagSinFrutosSecos, tagPlatoPrincipal, tagAltaEnProteinas, tagBajaEnCarbohidratos]
     }));
 
@@ -272,7 +272,7 @@ async function seedDev(dataSource: DataSource) {
         description: 'La ensalada César de coles de Bruselas combina el sabor asado de las coles con el toque característico de salsa Worcestershire y queso parmesano.',
         portions: 4,
         preparationTimeMinutes: 25,
-        imageUrl: 'https://via.placeholder.com/500x500?text=Ensalada+César+de+coles+de+Bruselas',
+        imageUrl: 'https://pulso-feature-bucket.s3.sa-east-1.amazonaws.com/ensalada_cesar_coles_bruselas.png',
         tags: [tagAltaEnFibra, tagAltaEnProteinas]
     }));
 
@@ -366,7 +366,7 @@ async function seedDev(dataSource: DataSource) {
         description: 'Un helado refrescante y saludable hecho con ingredientes naturales y sin procesar.',
         portions: 4,
         preparationTimeMinutes: 10,
-        imageUrl: 'https://via.placeholder.com/500x500?text=Helado+de+banana+y+arándanos',
+        imageUrl: 'https://pulso-feature-bucket.s3.sa-east-1.amazonaws.com/helado_banana_arandanos.png',
         tags: [tagSinGluten, tagSinLactosa, tagPostre, tagBajaEnGrasas, tagBajaEnCalorias, tagBajaEnCarbohidratos]
     }));
 

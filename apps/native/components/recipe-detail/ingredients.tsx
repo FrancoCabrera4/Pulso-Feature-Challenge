@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
-import { Ingredient } from "../../lib/api-client";
-
+import { Ingredient } from "../../lib/api-client.interface";
 
 const IngredientItem = ({ item }: { item: Ingredient }) => (
     <View style={styles.ingredientItem}>

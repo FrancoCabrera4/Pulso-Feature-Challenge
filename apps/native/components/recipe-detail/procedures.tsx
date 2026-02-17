@@ -1,7 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { ProcedureStep } from "../../lib/api-client";
-import { Colors } from '../../constants/constants';
-
+import { ProcedureStep } from '../../lib/api-client.interface';
 
   const ProcedureStepItem = ({ item }: { item: ProcedureStep }) => (
     <View style={styles.procedureItem}>

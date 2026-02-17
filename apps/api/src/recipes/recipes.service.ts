@@ -1,26 +1,37 @@
 import { Injectable } from '@nestjs/common';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Recipe } from './entities/recipe.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class RecipesService {
-  create(createRecipeDto: CreateRecipeDto) {
-    return 'This action adds a new recipe';
+
+  constructor(
+    @InjectRepository(Recipe)
+    private recipeRepository: Repository<Recipe>
+  ) {}
+
+  async getListRecipes() {
+    return await this.recipeRepository.find();
   }
 
-  findAll() {
-    return `This action returns all recipes`;
-  }
+  async getRecipeDetail(recipeId: string) {
+    const recipe = await this.recipeRepository.findOne({
+      relations: {
+        ingredients: true,
+        procedure: true,
+        tags: true,
+        recipeToNutritionalCategory: {
+          nutritionalCategory: true
+        }
+      },
+      where: {
+        id: +recipeId
+      }
+    })
 
-  findOne(id: number) {
-    return `This action returns a #${id} recipe`;
-  }
-
-  update(id: number, updateRecipeDto: UpdateRecipeDto) {
-    return `This action updates a #${id} recipe`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} recipe`;
+    return recipe
   }
 }

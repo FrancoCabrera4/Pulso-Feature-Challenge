@@ -10,7 +10,7 @@ export class ProcedureStep {
     @Column('int')
     order: number;
 
-    @Column()
+    @Column('text')
     description: string;
 
     @ManyToOne(() => Recipe, (recipe) => recipe.procedure)

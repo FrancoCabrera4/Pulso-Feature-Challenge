@@ -1,11 +1,10 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { NutritionalInfo } from '../../lib/api-client';
+import { RecipeToNutritionalCategory } from '../../lib/api-client.interface';
 
 
-
-const NutritionalRow = ({ item }: { item: NutritionalInfo }) => (
+const NutritionalRow = ({ item }: { item: RecipeToNutritionalCategory }) => (
     <View style={styles.nutritionalRow}>
-      <Text style={styles.nutritionalLabel}>{item.categoryDescription}</Text>
+      <Text style={styles.nutritionalLabel}>{item.nutritionalCategory.description}</Text>
       <Text style={styles.nutritionalValue}>
         {item.value}
       </Text>
@@ -13,7 +12,7 @@ const NutritionalRow = ({ item }: { item: NutritionalInfo }) => (
   );
 
 export function NutritionalData(
-    {nutritionalInfo}: {nutritionalInfo: NutritionalInfo[]}
+    {nutritionalInfo}: {nutritionalInfo: RecipeToNutritionalCategory[]}
 ) {
     return (
         <View style={styles.section}>
