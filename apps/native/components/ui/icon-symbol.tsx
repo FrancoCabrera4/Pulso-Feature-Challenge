@@ -19,6 +19,8 @@ type IconSymbolName = keyof typeof MAPPING;
 const MAPPING = {
   "message.fill": "chat",
   "fork.knife": "silverware-fork-knife",
+  "clock": "clock",
+  "xmark": "close"
 } as IconMapping;
 
 /**
