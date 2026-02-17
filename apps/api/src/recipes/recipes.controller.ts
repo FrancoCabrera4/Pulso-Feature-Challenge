@@ -10,9 +10,13 @@ export class RecipesController {
     return await this.recipesService.getListRecipes();
   }
 
+  @Get('/similar')
+  async getRecipeSimilar(@Query('query') query: string) {
+    return await this.recipesService.similaritySearch(query);
+  }
+
   @Get(':id')
   async getRecipeDetail(@Param('id') id: string) {
     return await this.recipesService.getRecipeDetail(id);
   }
-
 }

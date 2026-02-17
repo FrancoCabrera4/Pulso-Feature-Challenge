@@ -8,6 +8,7 @@ import { ProcedureStep } from './recipes/entities/procedureStep.entity';
 import { Tag } from './recipes/entities/tag.entity';
 import { NutritionalCategory } from './recipes/entities/nutritionaCategory.entity';
 import { RecipeToNutritionalCategory } from './recipes/entities/recipeToNutritionalCategory.entity';
+import { RecipeEmbedding } from './recipes/entities/recipeEmbedding.entity';
 
 
 @Module({
@@ -17,14 +18,16 @@ import { RecipeToNutritionalCategory } from './recipes/entities/recipeToNutritio
       envFilePath: '.env',
     }),
     TypeOrmModule.forRoot({
-        type: 'mysql',
+        type: 'postgres',
         host: process.env.DATABASE_HOST,
         port: +process.env.DATABASE_PORT!,
         username: process.env.DATABASE_USERNAME,
         password: process.env.DATABASE_PASSWORD,
         database: process.env.DATABASE_NAME,
         entities: [
-          Recipe, Ingredient, ProcedureStep, Tag, NutritionalCategory, RecipeToNutritionalCategory
+          Recipe, Ingredient, ProcedureStep, Tag,
+           NutritionalCategory, RecipeToNutritionalCategory,
+            RecipeEmbedding
         ],
         synchronize: true,
     }), 

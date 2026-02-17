@@ -3,6 +3,7 @@ import { Ingredient } from "./ingredient.entity";
 import { ProcedureStep } from "./procedureStep.entity";
 import { Tag } from "./tag.entity";
 import { RecipeToNutritionalCategory } from "./recipeToNutritionalCategory.entity";
+import { RecipeEmbedding } from "./recipeEmbedding.entity";
 
 @Entity()
 export class Recipe {
@@ -37,4 +38,7 @@ export class Recipe {
 
     @OneToMany(() => RecipeToNutritionalCategory, (recipeToNutritionalCategory) => recipeToNutritionalCategory.recipe)
     recipeToNutritionalCategory: RecipeToNutritionalCategory;
+
+    @OneToMany(() => RecipeEmbedding, (recipeEmbedding) => recipeEmbedding.recipe)
+    embeddings: RecipeEmbedding[];
 }

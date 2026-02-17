@@ -8,6 +8,7 @@ import { ProcedureStep } from './../../../src/recipes/entities/procedureStep.ent
 import { Tag } from './../../../src/recipes/entities/tag.entity';
 import { NutritionalCategory } from './../../../src/recipes/entities/nutritionaCategory.entity';
 import { RecipeToNutritionalCategory } from './../../../src/recipes/entities/recipeToNutritionalCategory.entity';
+import { RecipeEmbedding } from './../../../src/recipes/entities/recipeEmbedding.entity';
 
 
 async function seed() {
@@ -15,7 +16,7 @@ async function seed() {
 
   const dataSource = app.get(DataSource);
 
-  console.log('🌱 Database connected');
+  console.log('Database connected');
 
 
   if (process.env.NODE_ENV !== 'production') {
@@ -23,7 +24,7 @@ async function seed() {
   }
 
   await app.close();
-  console.log('✅ Seeding completed');
+  console.log('Seeding completed');
 }
 
 
@@ -35,11 +36,13 @@ async function seedDev(dataSource: DataSource) {
     const tagRepo = dataSource.getRepository(Tag);
     const nutritionalCategoryRepo = dataSource.getRepository(NutritionalCategory);
     const recipeToNutritionalCategoryRepo = dataSource.getRepository(RecipeToNutritionalCategory);
+    const recipeEmbeddingRepo = dataSource.getTreeRepository(RecipeEmbedding);
 
     // Clear existing data
     await recipeToNutritionalCategoryRepo.deleteAll();
     await ingredientRepo.deleteAll();
     await procedureStepRepo.deleteAll();
+    await recipeEmbeddingRepo.deleteAll();
     await recipeRepo.deleteAll();
     await tagRepo.deleteAll();
     await nutritionalCategoryRepo.deleteAll();
@@ -421,7 +424,7 @@ async function seedDev(dataSource: DataSource) {
         }));
     }
 
-    console.log('✅ Recipes seeded successfully!');
+    console.log('Recipes seeded successfully');
 }
 
 seed()

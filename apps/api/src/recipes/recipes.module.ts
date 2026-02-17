@@ -8,9 +8,10 @@ import { ProcedureStep } from './entities/procedureStep.entity';
 import { Tag } from './entities/tag.entity';
 import { NutritionalCategory } from './entities/nutritionaCategory.entity';
 import { RecipeToNutritionalCategory } from './entities/recipeToNutritionalCategory.entity';
+import { RecipeEmbedding } from './entities/recipeEmbedding.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Recipe, Ingredient, ProcedureStep, Tag, NutritionalCategory, RecipeToNutritionalCategory])],
+  imports: [TypeOrmModule.forFeature([Recipe, Ingredient, ProcedureStep, Tag, NutritionalCategory, RecipeToNutritionalCategory, RecipeEmbedding])],
   controllers: [RecipesController],
   providers: [RecipesService],
 })
