@@ -1,10 +1,11 @@
-# Pulso Feature Challenge
+# Pulso Feature Self Challenge
 
 # Overview video
 
 A short video going over the motivation for the feature, what the feature exactly is and how it is implemented.
 
-<div style="position: relative; padding-bottom: 56.25%; height: 0;"><iframe src="https://www.loom.com/embed/600803217d5a479ab6cb86fb7cfe0f93" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+[![Watch the video](https://github.com/user-attachments/assets/0cb76935-cf56-4956-8477-50fef3ef09fe)](https://www.loom.com/share/600803217d5a479ab6cb86fb7cfe0f93)
+
 
 # Description
 
