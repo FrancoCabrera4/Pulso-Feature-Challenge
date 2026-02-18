@@ -1,20 +1,17 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Recipe } from "./recipe.entity";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Recipe } from './recipe.entity';
 
 @Entity()
 export class Ingredient {
+  @PrimaryGeneratedColumn('increment')
+  id: string;
 
-    @PrimaryGeneratedColumn('increment')
-    id: string;
+  @Column('int')
+  order: number;
 
-    @Column('int')
-    order: number;
+  @Column('text')
+  description: string;
 
-    @Column('text')
-    description: string;
-
-    @ManyToOne(() => Recipe, (recipe) => recipe.ingredients)
-    recipe: Recipe;
-
-
+  @ManyToOne(() => Recipe, (recipe) => recipe.ingredients)
+  recipe: Recipe;
 }

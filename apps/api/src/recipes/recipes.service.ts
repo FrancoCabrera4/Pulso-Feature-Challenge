@@ -1,22 +1,22 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Recipe } from './entities/recipe.entity';
 import { Repository } from 'typeorm';
 import { RecipeEmbedding } from './entities/recipeEmbedding.entity';
 import OpenAI from 'openai';
 import { cosineSimilarity } from 'src/helpers/rag';
-import { ChatbotService } from 'src/chatbot/chatbot.service';
-import { MorfeoInstructions, ResponseSchema } from './prompts/prompts';
 
 @Injectable()
 export class RecipesService {
-
+  private openai: OpenAI;
   constructor(
     @InjectRepository(Recipe)
     private recipeRepository: Repository<Recipe>,
     @InjectRepository(RecipeEmbedding)
     private recipeEmbeddingRepository: Repository<RecipeEmbedding>,
-  ) {}
+  ) {
+    this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  }
 
   async getListRecipes() {
     return await this.recipeRepository.find();
@@ -29,47 +29,45 @@ export class RecipesService {
         procedure: true,
         tags: true,
         recipeToNutritionalCategory: {
-          nutritionalCategory: true
-        }
+          nutritionalCategory: true,
+        },
       },
       where: {
-        id: +recipeId
-      }
-    })
+        id: +recipeId,
+      },
+    });
 
-    return recipe
+    return recipe;
   }
 
   async similaritySearch(query: string) {
-     const openai = new OpenAI({
-       apiKey: process.env.OPENAI_API_KEY,
-     });
+    const MAX_RESULTS = 2;
 
-     const queryEmbedding = await openai.embeddings.create({
-      model: "text-embedding-3-small",
+    const queryEmbedding = await this.openai.embeddings.create({
+      model: 'text-embedding-3-small',
       input: query,
-      encoding_format: "float"
-     })
+      encoding_format: 'float',
+    });
 
     const queryVector = queryEmbedding.data[0].embedding as number[];
 
     const allEmbeddings = await this.recipeEmbeddingRepository.find({
       relations: {
-        recipe: true
-      }
+        recipe: true,
+      },
     });
 
     const similarities = allEmbeddings.map((embedding) => {
       const similarity = cosineSimilarity(queryVector, embedding.content);
       return {
-        recipeId: embedding.recipe,
+        recipe: embedding.recipe,
         similarity,
       };
     });
 
     const topResults = similarities
       .sort((a, b) => b.similarity - a.similarity)
-      .slice(0, 2);
+      .slice(0, Math.min(MAX_RESULTS, allEmbeddings.length));
 
     return topResults;
   }

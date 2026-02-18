@@ -1,44 +1,53 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Ingredient } from "./ingredient.entity";
-import { ProcedureStep } from "./procedureStep.entity";
-import { Tag } from "./tag.entity";
-import { RecipeToNutritionalCategory } from "./recipeToNutritionalCategory.entity";
-import { RecipeEmbedding } from "./recipeEmbedding.entity";
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Ingredient } from './ingredient.entity';
+import { ProcedureStep } from './procedureStep.entity';
+import { Tag } from './tag.entity';
+import { RecipeToNutritionalCategory } from './recipeToNutritionalCategory.entity';
+import { RecipeEmbedding } from './recipeEmbedding.entity';
 
 @Entity()
 export class Recipe {
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
-    @PrimaryGeneratedColumn('increment')
-    id: number;
+  @Column()
+  title: string;
 
-    @Column()
-    title: string;
-    
-    @Column()
-    description: string;
+  @Column()
+  description: string;
 
-    @Column('int')
-    portions: number;
+  @Column('int')
+  portions: number;
 
-    @Column()
-    preparationTimeMinutes: number;
+  @Column()
+  preparationTimeMinutes: number;
 
-    @Column()
-    imageUrl: string;
-    
-    @OneToMany(() => Ingredient, (ingredient) => ingredient.recipe)
-    ingredients: Ingredient[];
+  @Column()
+  imageUrl: string;
 
-    @OneToMany(() => ProcedureStep, (procedureStep) => procedureStep.recipe)
-    procedure: ProcedureStep[];
+  @OneToMany(() => Ingredient, (ingredient) => ingredient.recipe)
+  ingredients: Ingredient[];
 
-    @ManyToMany(() => Tag, (Tag) => Tag.recipes)
-    @JoinTable()
-    tags: Tag[];
+  @OneToMany(() => ProcedureStep, (procedureStep) => procedureStep.recipe)
+  procedure: ProcedureStep[];
 
-    @OneToMany(() => RecipeToNutritionalCategory, (recipeToNutritionalCategory) => recipeToNutritionalCategory.recipe)
-    recipeToNutritionalCategory: RecipeToNutritionalCategory;
+  @ManyToMany(() => Tag, (Tag) => Tag.recipes)
+  @JoinTable()
+  tags: Tag[];
 
-    @OneToMany(() => RecipeEmbedding, (recipeEmbedding) => recipeEmbedding.recipe)
-    embeddings: RecipeEmbedding[];
+  @OneToMany(
+    () => RecipeToNutritionalCategory,
+    (recipeToNutritionalCategory) => recipeToNutritionalCategory.recipe,
+  )
+  recipeToNutritionalCategory: RecipeToNutritionalCategory;
+
+  @OneToMany(() => RecipeEmbedding, (recipeEmbedding) => recipeEmbedding.recipe)
+  embeddings: RecipeEmbedding[];
 }

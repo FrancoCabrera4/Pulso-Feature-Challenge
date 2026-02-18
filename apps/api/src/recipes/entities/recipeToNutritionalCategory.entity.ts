@@ -1,27 +1,27 @@
-import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Recipe } from "./recipe.entity";
-import { NutritionalCategory } from "./nutritionaCategory.entity";
-
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Recipe } from './recipe.entity';
+import { NutritionalCategory } from './nutritionaCategory.entity';
 
 @Entity()
 export class RecipeToNutritionalCategory {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @Column()
+  recipeId: number;
 
-    @Column()
-    recipeId: number;
+  @Column()
+  nutritionalCategoryId: number;
 
-    @Column()
-    nutritionalCategoryId: number;
+  @Column()
+  value: string;
 
-    @Column()
-    value: string;
+  @ManyToOne(() => Recipe, (recipe) => recipe.recipeToNutritionalCategory)
+  recipe: Recipe;
 
-    @ManyToOne(() => Recipe, (recipe) => recipe.recipeToNutritionalCategory)
-    recipe: Recipe;
-
-    @ManyToOne(() => NutritionalCategory, (nutritionalCategory) => nutritionalCategory.recipeToNutritionalCategory)
-    nutritionalCategory: NutritionalCategory;
-
+  @ManyToOne(
+    () => NutritionalCategory,
+    (nutritionalCategory) => nutritionalCategory.recipeToNutritionalCategory,
+  )
+  nutritionalCategory: NutritionalCategory;
 }

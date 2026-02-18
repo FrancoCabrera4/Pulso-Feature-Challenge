@@ -1,19 +1,17 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Recipe } from "./recipe.entity";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Recipe } from './recipe.entity';
 
 @Entity()
 export class ProcedureStep {
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
-    @PrimaryGeneratedColumn('increment')
-    id: number;
-    
-    @Column('int')
-    order: number;
+  @Column('int')
+  order: number;
 
-    @Column('text')
-    description: string;
+  @Column('text')
+  description: string;
 
-    @ManyToOne(() => Recipe, (recipe) => recipe.procedure)
-    recipe: Recipe;
-
+  @ManyToOne(() => Recipe, (recipe) => recipe.procedure)
+  recipe: Recipe;
 }

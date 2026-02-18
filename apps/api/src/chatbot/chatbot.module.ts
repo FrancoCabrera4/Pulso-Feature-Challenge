@@ -7,6 +7,6 @@ import { RecipesModule } from 'src/recipes/recipes.module';
   imports: [RecipesModule],
   controllers: [ChatbotController],
   providers: [ChatbotService],
-  exports: [ChatbotService]
+  exports: [ChatbotService],
 })
 export class ChatbotModule {}

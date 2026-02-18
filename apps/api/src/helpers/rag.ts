@@ -1,4 +1,3 @@
-
 export function cosineSimilarity(vecA: number[], vecB: number[]): number {
   let dotProduct = 0;
   let magnitudeA = 0;
