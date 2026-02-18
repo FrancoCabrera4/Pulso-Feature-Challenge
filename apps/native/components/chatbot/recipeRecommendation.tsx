@@ -1,41 +1,48 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { Recipe } from "../../lib/api-client.interface";
 import { Colors } from "../../constants/constants";
 import { IconSymbol } from "../ui/icon-symbol";
+import { useRouter } from "expo-router";
 
-export function RecipeRecommendation({recipe}: {recipe: Recipe}) {
+export function RecipeRecommendation({ recipe }: { recipe: Recipe }) {
+  const router = useRouter();
+
   return (
     <>
-    <View style={styles.container}>
-      {/* Image on top - full width */}
-      <Image
-        source={{ uri: recipe.imageUrl }}
-        style={styles.image}
-      />
+      <Pressable
+        onPress={() => {
+          router.push("/recipe-detail?recipeId=" + recipe.id);
+        }}
+        style={styles.container}
+      >
+        {/* Image on top - full width */}
+        <Image source={{ uri: recipe.imageUrl }} style={styles.image} />
 
-      {/* Content below image */}
-      <View style={styles.contentWrapper}>
-        <Text style={styles.title} numberOfLines={2}>
-          {recipe.title}
-        </Text>
-        <Text style={styles.description} numberOfLines={2}>
-          {recipe.description}
-        </Text>
+        {/* Content below image */}
+        <View style={styles.contentWrapper}>
+          <Text style={styles.title} numberOfLines={2}>
+            {recipe.title}
+          </Text>
+          <Text style={styles.description} numberOfLines={2}>
+            {recipe.description}
+          </Text>
 
-        {/* Footer with time and portions */}
-        <View style={styles.footer}>
-          <View style={styles.timeContainer}>
-            <IconSymbol name="clock" size={14} color={Colors.primary} />
-            <Text style={styles.timeText}>{recipe.preparationTimeMinutes} min</Text>
-          </View>
-          <View style={styles.portionsContainer}>
-            <IconSymbol name="fork.knife" size={14} color={Colors.primary} />
-            <Text style={styles.portionsText}>{recipe.portions}</Text>
+          {/* Footer with time and portions */}
+          <View style={styles.footer}>
+            <View style={styles.timeContainer}>
+              <IconSymbol name="clock" size={14} color={Colors.primary} />
+              <Text style={styles.timeText}>
+                {recipe.preparationTimeMinutes} min
+              </Text>
+            </View>
+            <View style={styles.portionsContainer}>
+              <IconSymbol name="fork.knife" size={14} color={Colors.primary} />
+              <Text style={styles.portionsText}>{recipe.portions}</Text>
+            </View>
           </View>
         </View>
-      </View>
-    </View>
-    <Text style={styles.clickReminderText}>Haz click para ver la receta</Text>
+      </Pressable>
+      <Text style={styles.clickReminderText}>Haz click para ver la receta</Text>
     </>
   );
 }
@@ -53,7 +60,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 12,
     elevation: 12,
-    width: "70%"
+    width: "70%",
   },
   image: {
     width: "100%",
@@ -113,6 +120,6 @@ const styles = StyleSheet.create({
   },
   clickReminderText: {
     fontSize: 12,
-    paddingLeft: 24
-  }
+    paddingLeft: 24,
+  },
 });

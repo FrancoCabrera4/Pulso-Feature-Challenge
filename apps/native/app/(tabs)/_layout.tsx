@@ -4,9 +4,7 @@ import { Colors } from "../../constants/constants";
 import { HapticTab } from "../../components/haptic-tab";
 import { IconSymbol } from "../../components/ui/icon-symbol";
 
-
 export default function TabLayout() {
-
   return (
     <Tabs
       screenOptions={{

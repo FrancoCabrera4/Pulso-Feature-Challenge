@@ -1,22 +1,14 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet } from "react-native";
 
-
-export function InitialGreet(
-    {userName}: {userName: string}
-) {
-    return (
-        <View style={styles.header}>
-          <Text style={styles.title}>
-            Hola {userName},
-          </Text>
-          <Text style={styles.subtitle}>Soy Morfeo, tu asistente AI.</Text>
-          <Text style={styles.subtitle}>
-            Hazme una pregunta para comenzar
-          </Text>
-        </View>
-    )
+export function InitialGreet({ userName }: { userName: string }) {
+  return (
+    <View style={styles.header}>
+      <Text style={styles.title}>Hola {userName},</Text>
+      <Text style={styles.subtitle}>Soy Morfeo, tu asistente AI.</Text>
+      <Text style={styles.subtitle}>Hazme una pregunta para comenzar</Text>
+    </View>
+  );
 }
-
 
 const styles = StyleSheet.create({
   header: {
@@ -32,6 +24,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "300",
     opacity: 1,
-    paddingTop: 30
+    paddingTop: 30,
   },
-})
+});

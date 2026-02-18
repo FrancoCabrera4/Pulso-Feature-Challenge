@@ -1,47 +1,38 @@
-import { View, Text, StyleSheet } from 'react-native'
-import { Colors } from '../../constants/constants'
+import { View, Text, StyleSheet } from "react-native";
+import { Colors } from "../../constants/constants";
 
-
-interface props {
-    isUser: boolean,
-    text: string
-    childrenComponents?: any
+export interface Message {
+  id: number;
+  isUser: boolean;
+  text: string;
+  childrenComponents?: any;
 }
 
-export function Message(
-    {isUser, text, childrenComponents}: props
-) {
-
-    return (
-          <View
-            style={[
-              styles.messageWrapper,
-              isUser
-                ? styles.userMessageWrapper
-                : styles.aiMessageWrapper,
-            ]}
-          >
-            <View
-              style={[
-                styles.messageBubble,
-                isUser
-                  ? { backgroundColor: Colors["userChatBackground"] }
-                  : { backgroundColor: Colors["background"] },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.messageText,
-                  isUser && { color: "#000", fontWeight: "300" },
-                ]}
-              >
-                {text}
-              </Text>
-            {childrenComponents}
-            </View>
-
-          </View>
-    )
+export function Message({ isUser, text, childrenComponents }: Message) {
+  return (
+    <View
+      style={[
+        styles.messageWrapper,
+        isUser ? styles.userMessageWrapper : styles.aiMessageWrapper,
+      ]}
+    >
+      <View
+        style={[
+          styles.messageBubble,
+          isUser
+            ? { backgroundColor: Colors["userChatBackground"] }
+            : { backgroundColor: Colors["background"] },
+        ]}
+      >
+        <Text
+          style={[styles.messageText, { color: "#000", fontWeight: "300" }]}
+        >
+          {text}
+        </Text>
+        {childrenComponents}
+      </View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -65,4 +56,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
   },
-})
+});
