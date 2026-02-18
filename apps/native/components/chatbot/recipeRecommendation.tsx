@@ -121,5 +121,6 @@ const styles = StyleSheet.create({
   clickReminderText: {
     fontSize: 12,
     paddingLeft: 24,
+    fontWeight: "300",
   },
 });

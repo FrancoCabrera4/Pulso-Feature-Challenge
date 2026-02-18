@@ -1,14 +1,14 @@
 // src/database/seeds/seed.ts
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from '../../app.module';
+import { AppModule } from 'src/app.module';
 import { DataSource } from 'typeorm';
-import { Recipe } from './../../../src/recipes/entities/recipe.entity';
-import { Ingredient } from './../../../src/recipes/entities/ingredient.entity';
-import { ProcedureStep } from './../../../src/recipes/entities/procedureStep.entity';
-import { Tag } from './../../../src/recipes/entities/tag.entity';
-import { NutritionalCategory } from './../../../src/recipes/entities/nutritionaCategory.entity';
-import { RecipeToNutritionalCategory } from './../../../src/recipes/entities/recipeToNutritionalCategory.entity';
-import { RecipeEmbedding } from './../../../src/recipes/entities/recipeEmbedding.entity';
+import { Recipe } from 'src/recipes/entities/recipe.entity';
+import { Ingredient } from 'src/recipes/entities/ingredient.entity';
+import { ProcedureStep } from 'src/recipes/entities/procedureStep.entity';
+import { Tag } from 'src/recipes/entities/tag.entity';
+import { NutritionalCategory } from 'src/recipes/entities/nutritionaCategory.entity';
+import { RecipeToNutritionalCategory } from 'src/recipes/entities/recipeToNutritionalCategory.entity';
+import { RecipeEmbedding } from 'src/recipes/entities/recipeEmbedding.entity';
 
 async function seed() {
   const app = await NestFactory.createApplicationContext(AppModule);

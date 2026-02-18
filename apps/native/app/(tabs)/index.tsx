@@ -34,6 +34,8 @@ export default function HomeScreen() {
     }
   };
 
+  const userName = process.env.EXPO_PUBLIC_USER_NAME || "Sin Nombre";
+
   return (
     <View style={styles.container}>
       {/* Title */}
@@ -42,9 +44,7 @@ export default function HomeScreen() {
       </View>
 
       {/* Initial Greet */}
-      {messages.length === 0 ? (
-        <InitialGreet userName="Franco Cabrera" />
-      ) : null}
+      {messages.length === 0 ? <InitialGreet userName={userName} /> : null}
 
       {/* Messages Area */}
       <ScrollView
@@ -108,7 +108,7 @@ const handleStreamResponse = async ({
           id: prev.length + 1,
           text: finalText,
           isUser: false,
-          childrenComponent: finalJson.recipe ? (
+          childrenComponents: finalJson.recipe ? (
             <RecipeRecommendation recipe={finalJson.recipe} />
           ) : null,
         },

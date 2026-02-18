@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './../../src/app.module';
+import { AppModule } from 'src/app.module';
 import { DataSource } from 'typeorm';
-import { Recipe } from './../../src/recipes/entities/recipe.entity';
-import { RecipeEmbedding } from './../../src/recipes/entities/recipeEmbedding.entity';
+import { Recipe } from 'src/recipes/entities/recipe.entity';
+import { RecipeEmbedding } from 'src/recipes/entities/recipeEmbedding.entity';
 import OpenAI from 'openai';
 
 async function generateEmbeddings() {

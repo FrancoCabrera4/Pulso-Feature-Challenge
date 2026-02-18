@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "nest start --watch",
     "build": "nest build",
-    "seed:db": "npx ts-node src/database/seeds/dev.seed.ts",
-    "generate:embeddings": "npx ts-node src/database/embeddings.ts",
+    "seed:db": "npx ts-node -r tsconfig-paths/register src/database/seeds/dev.seed.ts",
+    "generate:embeddings": "npx ts-node -r tsconfig-paths/register src/database/embeddings/embeddings.ts",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",

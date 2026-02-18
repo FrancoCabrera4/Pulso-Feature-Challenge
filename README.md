@@ -1,32 +1,59 @@
-# Turborepo react-native starter
+# Pulso Feature Challenge
 
-This is a community-maintained example. If you experience a problem, please submit a pull request with a fix. GitHub Issues will be closed.
+PulsoAI is a fitness and healthcare application for tracking progress and improving one self.
 
-## Using this example
+It leverages AI for a couple of features, mainly the chatbot "Morfeo" and the ability to extract diatary information of different foods by simply taking a picture of it.
 
-Run the following command:
+In this small self challenge I implemented a feature by which the chatbot has knowledge of the available recipes and can suggest the user some of them.
 
-```sh
-npx create-turbo@latest -e with-react-native-web
+This is achieved by leveraging RAG:
+
+- First a vector database is created (using the extension of postgres pgvector) and then some vectors are populated with embeddings created from the recipes catalog.
+
+- Then, when the user makes a query to this chatbot the query is embedded and compared by cosine distance in the vector database. The result of this is that we now have the data of the closest recipes, semantically speaking, to the query of the user. This is then appended to the query sent to the LLM, which completes the RAG proccess.
+
+- If the LLM decides that the query and the provided recipes make sense it will generate a response recommending one of said recipes. The code uses Server Side Events (SSE) to then stream the data to the front end to get instant feedback from the generation, and not wait for the complete response generation.
+
+- Since the streamed response are chunks of a JSON string the frontend uses a library called "partial-json" to parse the intermidiate results. Finally a small component is appended in the chat that links direcly to the recipe.
+
+# How to run the project locally
+
+1. Download the full monorepo.
+
+2. Install the necessary dependencies at the root of the monorepo.
+
+```
+npm run install
 ```
 
-## What's inside?
+3. Run the Docker container that has the database.
 
-This Turborepo includes the following packages/apps:
+```
+docker compose up --detach
+```
 
-### Apps and Packages
+4. Create the .env files, rename the .env.local files and is is okay to use the default variables, the only one necessary to change is the OPENAI_API_KEY
 
-- `native`: a [react-native](https://reactnative.dev/) app built with [expo](https://docs.expo.dev/)
-- `web`: a [Next.js](https://nextjs.org/) app built with [react-native-web](https://necolas.github.io/react-native-web/)
-- `@repo/ui`: a stub [react-native](https://reactnative.dev/) component library shared by both `web` and `native` applications
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+5. Seed the database, go to the api directory and run the command:
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+```
+npm run seed:db
+```
 
-### Utilities
+6. Create the embeddings of the data from the database, go to the api directory and run the command:
 
-This Turborepo has some additional tools already setup for you:
+```
+npm run generate:embeddings
+```
 
-- [Expo](https://docs.expo.dev/) for native development
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [Prettier](https://prettier.io) for code formatting
+7. Run both the api and the expo app, go to the root of the repository and simply run:
+
+```
+npm run dev
+```
+
+# Following improvements the project could have
+
+It would be very helpful to make a package to introduce type safety between the frontend and the backend. This is pretty straight forward thanks to the monorepo set up.
+
+Dockerize both applications.
