@@ -1,4 +1,4 @@
-import Constants from "expo-constants";
+import { io, Socket } from "socket.io-client";
 import { Recipe, RecipeDetail } from "./api-client.interface";
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL || "http://localhost:3000";
@@ -39,10 +39,12 @@ export async function getRecipeDetail(recipeId: string) {
   }
 }
 
-export async function sendMessage(userQuery: string) {
-  const eventSource = new EventSource(
-    API_URL + "/chatbot?userQuery=" + userQuery,
-  );
+export function sendMessage(userQuery: string): Socket {
+  const socket = io(API_URL + "/chatbot", {
+    query: {
+      userQuery: userQuery,
+    },
+  });
 
-  return eventSource;
+  return socket;
 }

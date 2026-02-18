@@ -91,16 +91,22 @@ const handleStreamResponse = async ({
   setChatbotText,
   setMessages,
 }: Props) => {
-  const eventSource = await sendMessage(inputText);
-
+  const socket = sendMessage(inputText);
   let data = "";
 
-  eventSource.onmessage = (event) => {
-    data += event.data;
+  socket.on("message", (chunk) => {
+    console.log("Received chunk:", chunk);
+    data += chunk.data;
+    if (data === "") return;
     const json = parse(data, STR | OBJ);
     setChatbotText(json.responseText ? json.responseText : "");
+  });
+
+  socket.on("complete", () => {
+    console.log("Stream completed");
     try {
       const finalJson = JSON.parse(data);
+      console.log("Final JSON:", finalJson);
       const finalText = finalJson.responseText ?? chatbotText;
       setMessages((prev) => [
         ...prev,
@@ -114,11 +120,21 @@ const handleStreamResponse = async ({
         },
       ]);
       setChatbotText("");
-      eventSource.close();
-    } catch {
-      // continue receiving stream if not yet valid JSON
+      socket.disconnect();
+    } catch (error) {
+      console.error("Error parsing final JSON:", error);
+      socket.disconnect();
     }
-  };
+  });
+
+  socket.on("error", (error) => {
+    console.error("Socket error:", error);
+    socket.disconnect();
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Socket disconnected");
+  });
 };
 
 const styles = StyleSheet.create({
@@ -146,5 +162,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginBottom: 16,
     paddingTop: 40,
+    backgroundColor: "#fff",
   },
 });

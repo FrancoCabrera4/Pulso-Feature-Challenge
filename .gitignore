@@ -39,3 +39,5 @@ yarn-error.log*
 
 ignore
 apps/native/.env
+apps/native/android
+apps/native/ios

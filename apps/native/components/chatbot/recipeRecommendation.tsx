@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 12,
     elevation: 12,
-    width: "70%",
+    width: "80%",
   },
   image: {
     width: "100%",
@@ -69,6 +69,8 @@ const styles = StyleSheet.create({
   },
   contentWrapper: {
     padding: 12,
+    width: "100%",
+    backgroundColor: "#fff",
   },
   title: {
     fontSize: 16,
