@@ -19,4 +19,5 @@ export class RecipesController {
   async getRecipeDetail(@Param('id') id: string) {
     return await this.recipesService.getRecipeDetail(id);
   }
+
 }

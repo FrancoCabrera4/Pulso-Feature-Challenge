@@ -9,6 +9,7 @@ import { Tag } from './recipes/entities/tag.entity';
 import { NutritionalCategory } from './recipes/entities/nutritionaCategory.entity';
 import { RecipeToNutritionalCategory } from './recipes/entities/recipeToNutritionalCategory.entity';
 import { RecipeEmbedding } from './recipes/entities/recipeEmbedding.entity';
+import { ChatbotModule } from './chatbot/chatbot.module';
 
 
 @Module({
@@ -31,7 +32,7 @@ import { RecipeEmbedding } from './recipes/entities/recipeEmbedding.entity';
         ],
         synchronize: true,
     }), 
-    RecipesModule],
+    RecipesModule, ChatbotModule],
   controllers: [],
   providers: [],
 })

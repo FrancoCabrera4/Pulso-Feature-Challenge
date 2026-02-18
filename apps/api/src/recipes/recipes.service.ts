@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Recipe } from './entities/recipe.entity';
 import { Repository } from 'typeorm';
 import { RecipeEmbedding } from './entities/recipeEmbedding.entity';
 import OpenAI from 'openai';
 import { cosineSimilarity } from 'src/helpers/rag';
+import { ChatbotService } from 'src/chatbot/chatbot.service';
+import { MorfeoInstructions, ResponseSchema } from './prompts/prompts';
 
 @Injectable()
 export class RecipesService {
@@ -13,7 +15,7 @@ export class RecipesService {
     @InjectRepository(Recipe)
     private recipeRepository: Repository<Recipe>,
     @InjectRepository(RecipeEmbedding)
-    private recipeEmbeddingRepository: Repository<RecipeEmbedding>
+    private recipeEmbeddingRepository: Repository<RecipeEmbedding>,
   ) {}
 
   async getListRecipes() {

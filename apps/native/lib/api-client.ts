@@ -42,3 +42,9 @@ export async function getRecipeDetail(recipeId: string) {
     throw error
   }
 }
+
+export async function sendMessage(userQuery: string) {
+  const eventSource = new EventSource(API_URL+'/chatbot?userQuery=' + userQuery,);
+
+  return eventSource;
+}

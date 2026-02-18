@@ -9,20 +9,28 @@ import {
   View,
 } from "react-native";
 import { Colors } from "../../constants/constants";
+import { sendMessage } from "../../lib/api-client";
+import { parse, STR, OBJ } from "partial-json";
+import { Message } from "../../components/chatbot/message";
+import { InitialGreet } from "../../components/chatbot/initialGreet";
+import { RecipeRecommendation } from "../../components/chatbot/recipeRecommendation";
 
 interface message {
   id: number;
   text: string;
   isUser: boolean;
+  childrenComponent?: any;
 }
 
 export default function HomeScreen() {
   const [messages, setMessages] = useState<message[]>([]);
   const [inputText, setInputText] = useState("");
+  const [currentMorfeoMessage, setCurrentMorfeoMessage] = useState("")
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (inputText.trim()) {
-      setMessages([
+      setCurrentMorfeoMessage("")
+      setMessages((messages) => [
         ...messages,
         {
           id: messages.length + 1,
@@ -31,6 +39,34 @@ export default function HomeScreen() {
         },
       ]);
       setInputText("");
+
+      const eventSource = await sendMessage(inputText)
+
+      let data = ""
+
+      eventSource.onmessage = (event) => {
+        data += event.data
+        const json = parse(data, STR | OBJ)
+        setCurrentMorfeoMessage(json.responseText ? json.responseText : "")
+        try {
+          const finalJson = JSON.parse(data)
+          console.log(finalJson)
+          const finalText = finalJson.responseText ?? currentMorfeoMessage
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: prev.length + 1,
+              text: finalText,
+              isUser: false,
+              childrenComponent: <RecipeRecommendation recipe={finalJson.recipe}/>
+            },
+          ])
+          setCurrentMorfeoMessage("")
+          eventSource.close()
+        } catch {
+          // continue receiving stream if not yet valid JSON
+        }
+      }
     }
   };
 
@@ -43,51 +79,20 @@ export default function HomeScreen() {
 
       {/* Initial Greet */}
       {messages.length === 0 ? (
-        <View style={{ ...styles.header, paddingTop: "50px" }}>
-          <Text style={styles.title}>
-            Hola Franco Cabrera,
-          </Text>
-          <Text style={styles.subtitle}>Soy Morfeo, tu asistente AI.</Text>
-          <Text style={{ ...styles.subtitle, paddingTop: "30px" }}>
-            Hazme una pregunta para comenzar
-          </Text>
-        </View>
+          <InitialGreet userName="Franco Cabrera"/>
       ) : null}
 
       {/* Messages Area */}
       <ScrollView
-        style={{ ...styles.messagesContainer, paddingTop: "40px" }}
+        style={styles.messagesContainer}
         showsVerticalScrollIndicator={false}
       >
         {messages.map((message) => (
-          <View
-            key={message.id}
-            style={[
-              styles.messageWrapper,
-              message.isUser
-                ? styles.userMessageWrapper
-                : styles.aiMessageWrapper,
-            ]}
-          >
-            <View
-              style={[
-                styles.messageBubble,
-                message.isUser
-                  ? { backgroundColor: Colors["userChatBackground"] }
-                  : { backgroundColor: Colors["background"] },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.messageText,
-                  message.isUser && { color: "#000", fontWeight: "300" },
-                ]}
-              >
-                {message.text}
-              </Text>
-            </View>
-          </View>
+            <Message key={message.id} isUser={message.isUser} text={message.text} childrenComponents={message.childrenComponent}></Message>
         ))}
+        {currentMorfeoMessage !== "" ?
+        (<Message isUser={false} text={currentMorfeoMessage} />) :
+        null}
       </ScrollView>
 
       {/* Input Area */}
@@ -146,6 +151,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     marginBottom: 16,
+    paddingTop: 40
   },
   messageWrapper: {
     marginBottom: 12,

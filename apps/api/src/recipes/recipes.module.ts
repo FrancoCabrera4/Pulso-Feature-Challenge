@@ -11,8 +11,12 @@ import { RecipeToNutritionalCategory } from './entities/recipeToNutritionalCateg
 import { RecipeEmbedding } from './entities/recipeEmbedding.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Recipe, Ingredient, ProcedureStep, Tag, NutritionalCategory, RecipeToNutritionalCategory, RecipeEmbedding])],
+  imports: [TypeOrmModule.forFeature([
+    Recipe, Ingredient, ProcedureStep, Tag, NutritionalCategory,
+     RecipeToNutritionalCategory, RecipeEmbedding])
+    ],
   controllers: [RecipesController],
   providers: [RecipesService],
+  exports: [RecipesService]
 })
 export class RecipesModule {}
